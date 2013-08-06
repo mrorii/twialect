@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-#-*- coding:utf-8 -*-
 
 import argparse
 import datetime
@@ -19,7 +18,6 @@ def get_oauth(consumer_key=None, consumer_secret=None,
 class Listener(StreamListener):
     def on_status(self, status):
         status.created_at += datetime.timedelta(hours=9)
-        text = status.text
         if not status.lang == 'ja':
             return
         if not status.geo:
