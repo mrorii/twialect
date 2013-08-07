@@ -4,6 +4,7 @@ import argparse
 import datetime
 import json
 import sys
+import time
 
 from tweepy.api import API
 from tweepy.auth import OAuthHandler
@@ -48,8 +49,18 @@ if __name__ == '__main__':
     parser.add_argument('--access_secret', required=True)
     args = parser.parse_args()
 
-    auth = get_oauth(consumer_key=args.consumer_key, consumer_secret=args.consumer_secret,
-                     access_key=args.access_key, access_secret=args.access_secret)
-    stream = Stream(auth, Listener(), secure=True)
-    stream.filter(languages=['ja'],
-                  locations=[127.64249, 26.060477, 145.347467, 45.344336])
+
+    while True:
+        # Twitter frequently disconnects the streaming api,
+        # so catch such events and try to reconnect after some time
+        # Refer to https://groups.google.com/forum/#!msg/tweepy/o0lpL3WRoyg/2QvDkJr0WvMJ
+        try:
+            auth = get_oauth(consumer_key=args.consumer_key,
+                             consumer_secret=args.consumer_secret,
+                             access_key=args.access_key,
+                             access_secret=args.access_secret)
+            stream = Stream(auth, Listener(), secure=True)
+            stream.filter(languages=['ja'],
+                          locations=[127.64249, 26.060477, 145.347467, 45.344336])
+        except:
+            time.sleep(30)
