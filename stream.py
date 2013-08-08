@@ -35,6 +35,7 @@ class Listener(StreamListener):
             'mentions': status.entities['user_mentions'],
             'hashtags': status.entities['hashtags'],
             'text': status.text,
+            'source': status.source,
         }
 
         sys.stdout.write(json.dumps(data))
