@@ -1,4 +1,4 @@
-# twilect
+# twialect
 
 ## Usage
 
